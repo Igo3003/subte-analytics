@@ -32,8 +32,10 @@ source .venv/bin/activate  # Linux / Mac
 pip install -r requirements.txt
 
 ```
-## 🧾 Notas a tener en cuenta
+## 🧾 Notas técnicas
 - El proyecto incluye un módulo lectura_de_archivos.py encargado de procesar los archivos CSV originales.
 - Debido al tamaño de los datos, este procesamiento puede demorar varios minutos.
 - Para facilitar el uso y la reproducibilidad, los datos ya se encuentran preprocesados y cargados en el proyecto principal.
 - Si se desea analizar datos de otro período, es necesario ejecutar nuevamente lectura_de_archivos.py.
+- En caso de haber algún cambio en las líneas de subte (nuevas estaciones/líneas), el módulo lectura_de_archivos.py debería modificarse correspondientemente.
+- Los datos usados fueron del año 2024. En caso de querer analizar otros datos, modificar en la línea 34 de analisis.py el número 366 por 365 en caso de que el año a analizar no sea bisiesto. 

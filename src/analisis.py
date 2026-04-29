@@ -3,8 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
 from matplotlib.colors import PowerNorm
-from lectura_de_archivos import a,b,c,d,e,h,lista_lineas
+from lectura_de_archivos import a,b,c,d,e,h,lista_lineas,Linea
 from pathlib import Path
+import ast
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = BASE_DIR / "outputs"
@@ -20,43 +21,24 @@ def convertir_a_horario(x: float):
 def dividir_lista(l, e):
     return [x / e for x in l]
 
+def leer_info(lista_lineas: list[Linea]):
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    with open(OUTPUT_DIR / "info.txt",'r') as file:
+        info = file.read()
+    
+    lineas = info.strip().split("\n")
+    desde = 0
+    for l in range(len(lista_lineas)):
+        linea = lista_lineas[l]
+        linea.viajes_totales = int(lineas[l+2].split(":")[1].strip())
+        linea.promedio_hora = dividir_lista(ast.literal_eval(lineas[3].split(":", 1)[1].strip()),366)#Cambiar a 365 si el año no es biciesto
+
+        linea.diccionario_estaciones = ast.literal_eval(lineas[4].split(":", 1)[1].strip())
+
 # Datos precalculados a partir de lectura_de_archivos.py
 # para evitar reprocesar CSVs pesados
 def armar_graficos():
-    a.viajes_totales = 2517385
-    a.viajes_dia_promedio = a.viajes_totales/366
-    a.promedio_hora  = dividir_lista([26957, 51885, 75690, 132069, 194419, 270715, 349568, 539421, 720042, 817290, 787267, 854424, 951661, 969502, 849175, 776662, 793072, 751874, 637916, 576441, 571872, 566561, 537431, 546620, 563535, 584126, 583902, 649242, 686486, 687852, 700099, 788557, 760985, 716091, 656518, 729811, 681931, 660316, 631908, 780002, 735256, 733204, 731060, 917093, 844779, 844611, 826644, 1098667, 1014746, 903526, 809153, 967476, 821169, 666961, 535568, 544199, 476685, 419717, 379753, 447739, 360467, 295807, 254360, 287111, 227786, 183469, 156405, 157565, 112170, 80989, 57782, 40183, 22791],366)
-    a.diccionario_estaciones = {'San Pedrito': 6511052, 'Flores': 2536631, 'Carabobo': 2215018, 'Puan': 1457720, 'Primera Junta': 2811492, 'Acoyte': 2928990, 'Rio de Janeiro': 2134385, 'Castro Barros': 1861644, 'Loria': 1652541, 'Plaza Miserere': 3173431, 'Alberti': 1009571, 'Pasco': 590946, 'Congreso': 2554550, 'Saenz Peña ': 1137740, 'Lima': 1491147, 'Piedras': 1166744, 'Peru': 1923967, 'Plaza de Mayo': 3574379}
-
-    b.viajes_totales = 2678404
-    b.viajes_dia_promedio = b.viajes_totales/366
-    b.promedio_hora  = dividir_lista([55805, 70132, 106202, 170234, 244515, 312224, 442094, 605065, 742860, 810296, 810669, 923511, 1041181, 1012424, 893334, 854551, 849778, 796741, 701980, 641968, 659273, 641299, 607725, 631512, 649558, 659122, 683558, 773926, 809399, 806076, 810440, 912548, 897176, 835913, 776349, 855637, 834876, 769221, 749745, 910140, 894913, 874480, 865405, 1092412, 1071312, 1055396, 1005575, 1330852, 1260499, 1129454, 1048565, 1368735, 1165848, 941157, 791953, 802617, 723736, 627771, 580740, 645389, 572033, 465734, 404908, 428718, 364669, 313722, 282405, 292450, 214079, 164026, 129348, 92658, 49835],366)
-    b.diccionario_estaciones = {'Rosas': 5763629, 'Echeverria': 1203648, 'Los Incas': 1773791, 'Tronador': 1112900, 'Federico Lacroze': 5734365, 'Dorrego': 2521290, 'Malabia': 3369336, 'Angel Gallardo': 2790067, 'Medrano': 3267555, 'Carlos Gardel': 3107844, 'Pueyrredon': 2459274, 'Pasteur': 1479053, 'Callao.B': 3111667, 'Uruguay': 2483504, 'Carlos Pellegrini': 3780566, 'Florida': 2682241, 'Leandro N. Alem': 3749090}
-
-
-    c.viajes_totales = 1450012
-    c.viajes_dia_promedio = c.viajes_totales/366
-    c.promedio_hora = dividir_lista([76498, 121724, 234438, 348276, 406947, 532591, 524817, 716767, 682223, 792901, 827684, 795721, 879270, 950090, 848189, 766501, 708895, 627932, 599467, 522402, 454469, 441322, 439907, 423081, 427400, 430691, 438233, 442980, 446151, 465792, 396178, 512582, 502886, 477128, 443035, 468686, 442147, 435791, 411023, 521639, 455038, 456181, 464132, 570523, 528293, 553536, 522181, 710319, 629743, 595094, 607455, 720006, 552845, 502156, 406079, 402045, 353949, 299585, 265325, 308476, 246711, 224987, 199505, 212256, 163069, 139706, 123640, 136388, 76689, 53788, 32783, 21173, 8969],366)
-    c.diccionario_estaciones = {'Constitucion': 17665643, 'San Juan': 955748, 'Independencia': 1332475, 'Mariano Moreno': 1037171, 'Avenida de Mayo': 955560, 'Diagonal Norte': 1083598, 'Lavalle': 1383942, 'General San Martin': 1046437, 'Retiro': 7017866}
-
-
-    d.viajes_totales = 1942673
-    d.viajes_dia_promedio = d.viajes_totales/366
-    d.promedio_hora = dividir_lista([12906, 23475, 37069, 70826, 104513, 144949, 214113, 352105, 442250, 473292, 460076, 531848, 603800, 625167, 550361, 534083, 545086, 533861, 462536, 448025, 449238, 454923, 429374, 447504, 462761, 482409, 481946, 550267, 583898, 575638, 591489, 649065, 626238, 632076, 550640, 607381, 577008, 557900, 534954, 663155, 651769, 659892, 647389, 801329, 788772, 781407, 758721, 956828, 915439, 826948, 765910, 927407, 847575, 696018, 584952, 595431, 519812, 455099, 412884, 477080, 398081, 340793, 297975, 317991, 237714, 194557, 168420, 178047, 120269, 84115, 62012, 37036, 16982],366)
-    d.diccionario_estaciones = {'Congreso de Tucuman': 4762213, 'Juramento': 2654968, 'Jose Hernandez': 1755663, 'Olleros': 1762398, 'Ministro Carranza': 1864383, 'Palermo': 2776722, 'Plaza Italia': 2087582, 'Scalabrini Ortiz': 1332993, 'Bulnes': 2496711, 'Agüero': 1030007, 'Pueyrredon.D': 1222609, 'Facultad de Medicina': 2447269, 'Callao': 2113815, 'Tribunales': 1725032, '9 de julio': 757337, 'Catedral': 3333232}
-
-
-    e.viajes_totales = 1549761
-    e.viajes_dia_promedio = e.viajes_totales/366
-    e.promedio_hora = dividir_lista([18487, 37248, 53828, 78219, 105719, 135450, 187679, 275716, 350328, 374332, 350214, 391426, 442315, 448174, 378313, 351359, 346726, 319595, 264017, 249749, 241809, 236284, 223675, 239062, 252986, 290412, 313912, 344493, 349813, 301985, 288175, 328233, 315239, 291978, 248810, 283230, 261797, 250725, 245291, 331970, 309644, 315407, 315597, 442195, 407337, 410760, 406706, 602802, 556305, 522836, 503932, 625998, 470508, 359192, 284624, 285350, 249149, 222342, 200162, 229483, 197473, 170414, 156310, 176303, 155033, 153393, 166304, 165450, 84608, 46713, 29884, 18534, 10614],366)
-    e.diccionario_estaciones = {'Pza. de los Virreyes': 2164186, 'Varela': 550413, 'Medalla Milagrosa': 472273, 'Emilio Mitre': 1032278, 'Jose Maria Moreno': 1010290, 'Avenida La Plata': 1228285, 'Boedo': 1156511, 'Urquiza': 803532, 'Jujuy': 656443, 'Pichincha': 564721, 'Entre Rios': 921656, 'San Jose': 667593, 'Independencia.H': 2127199, 'General Belgrano': 851219, 'Bolivar': 2140343, 'Correo Central': 1506865, 'Catalinas': 1005424, 'Retiro E': 1161313}
-
-
-    h.viajes_totales = 1287939
-    h.viajes_dia_promedio = h.viajes_totales/366
-    h.promedio_hora = dividir_lista([16886, 37059, 48756, 89401, 137326, 185372, 220288, 324233, 433446, 483115, 432941, 441077, 502078, 524812, 432022, 384340, 387376, 381513, 330141, 322221, 302428, 299670, 283102, 292697, 313304, 332325, 316507, 362420, 377541, 384325, 384271, 435613, 407406, 371840, 324387, 372880, 353227, 334372, 313967, 378804, 375309, 378366, 367622, 464399, 444416, 438450, 409075, 541035, 489359, 459349, 442751, 568547, 486550, 429577, 328626, 332792, 291700, 262094, 253457, 330407, 242207, 188511, 156896, 184693, 151666, 130773, 93069, 95487, 69584, 49057, 35824, 32656, 19164],366)
-    h.diccionario_estaciones =  {'Hospitales': 3152217, 'Patricios': 2246301, 'Caseros': 1488489, 'Inclan': 1224640, 'Humberto I': 1302112, 'Venezuela': 1433235, 'Once': 3111979, 'Corrientes': 1089513, 'Cordoba': 1681436, 'Santa Fe': 2474928, 'Las Heras': 2086436, 'Facultad de Derecho': 1307671}
-
+    leer_info(lista_lineas)
 
 
     lineas = [l.nombre[-1] for l in lista_lineas]
