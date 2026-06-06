@@ -22,7 +22,7 @@ Análisis de uso del subte de Buenos Aires a partir de datos reales de usos de m
 ## ⚙️ Instalación
 
 ```bash
-git clone https://github.com/TU_USUARIO/subte-analytics.git
+git clone https://github.com/igo3003/subte-analytics.git
 cd subte-analytics
 
 python -m venv .venv
